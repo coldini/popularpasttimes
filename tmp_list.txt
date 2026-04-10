@@ -1,0 +1,13 @@
+ Volume in drive C is Windows
+ Volume Serial Number is 5AA6-5A25
+
+ Directory of C:\Users\colde\OneDrive\Desktop\Software Design\node_modules\iconv-lite\lib
+
+03/23/2026  01:28 PM    <DIR>          .
+03/23/2026  01:28 PM    <DIR>          ..
+03/23/2026  01:28 PM             1,035 bom-handling.js
+03/23/2026  01:28 PM             4,763 index.d.ts
+03/23/2026  01:28 PM             6,711 index.js
+03/23/2026  01:28 PM             2,979 streams.js
+               4 File(s)         15,488 bytes
+               2 Dir(s)  234,525,200,384 bytes free

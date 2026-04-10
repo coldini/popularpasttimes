@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Popular Pasttimes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="style/home.css" rel = "stylesheet" type="text/css"/>
+    <link href="style/external.css" rel="stylesheet" type="text/css"/>
+    <link href="style/dropdown.css" rel="stylesheet" type="text/css"/>
+    <link href="style/dropDownStyle.css" rel="stylesheet" type="text/css">
+
+
+
+     <!-- You need these two CDNs to use react, their version numbers must match -->
+    <!-- changed version on 10-20-2022 from 16.3.1 to 18 for react and react-dom -->
+    <script src='https://unpkg.com/react@18/umd/react.production.min.js'></script>
+    <script src='https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'></script>
+
+
+    <!-- This CDN lets you use JSX (looks like HTML tags in JS) -->
+    <script src='https://unpkg.com/babel-standalone@6.26.0/babel.js'></script>
+
+    <!-- This CDN lets you use React Routing -->
+    <script src='https://unpkg.com/react-router-dom@5.0.0/umd/react-router-dom.min.js'></script>
+
+
+    <script src="_JS_reusable/tableUtilities.js"></script>
+    <script src="_JS_reusable/dropDownFW.js"></script>
+    <script src="_JS_reusable/MakeObj.js"></script>
+    <script src="_JS_reusable/MakeReviewer.js"></script>
+    <script src="_JS_reusable/ajax_alt.js"></script>
+    <script src="_JS_reusable/filterObjectList.js"></script>
+    <script src="_JS_reusable/sortOrder.js"></script>
+    <script src="_JS_reusable/jsSort.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- Leaflet for map view in main.html -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="location.js"></script>
+
+    <!-- Initialize Firebase BEFORE loading components -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCVqs6MTylFgyNutyDgQtncu5vSEc7SJ8",
+            authDomain: "popularpastimes.firebaseapp.com",
+            projectId: "popularpastimes",
+            storageBucket: "popularpastimes.firebasestorage.app",
+            messagingSenderId: "242086694626",
+            appId: "1:242086694626:web:4588cec7f96df7d71598bb",
+            measurementId: "G-ND2608JZKS"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="React_CGF/Home.js"></script>
+    <script src="React_CGF/Login.js"></script>
+    <script src="React_CGF/Register.js"></script>
+    <script src="React_CGF/Profile.js"></script>
+    <script src="React_CGF/FindLocation.js"></script>
+
+
+
+    <script>
+        "use strict";
+
+        const Link = ReactRouterDOM.Link;
+        const Route = ReactRouterDOM.Route;
+
+
+        const Navigation = () => {
+            const [activeDropdown, setActiveDropdown] = React.useState(null);
+
+            const toggleDropdown = (dropdownName) => {
+                setActiveDropdown((current) => (current === dropdownName ? null : dropdownName));
+            };
+
+            React.useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (!event.target.closest('.dropDown')) {
+                        setActiveDropdown(null);
+                    }
+                };
+
+                document.addEventListener('click', handleClickOutside);
+                return () => document.removeEventListener('click', handleClickOutside);
+            }, []);
+
+            return React.createElement('div', {id: 'titleNav'},
+                React.createElement('div', {id: 'title'}, 'Popular Pasttimes'),
+                React.createElement('div', {id: 'nav'},
+                    React.createElement('div', {className: 'dropDown'},
+                        React.createElement(Link, {to: '/home'}, 'Home')
+                    ),
+                    React.createElement('div', {className: 'dropDown'},
+                        React.createElement('button', {
+                            type: 'button',
+                            className: 'dropHeader',
+                            onClick: () => toggleDropdown('account')
+                        }, 'Account'),
+                        React.createElement('div', {
+                            className: `dropContent ${activeDropdown === 'account' ? 'show' : 'hide'}`
+                        },
+                            React.createElement(Link, {to: '/register'}, 'Register'), React.createElement('br'),
+                            React.createElement(Link, {to: '/login'}, 'Log In'), React.createElement('br'),
+                            React.createElement(Link, {to: '/profile'}, 'Profile')
+                        )
+                    ),
+                    React.createElement('div', {className: 'dropDown'},
+                        React.createElement('button', {
+                            type: 'button',
+                            className: 'dropHeader',
+                            onClick: () => toggleDropdown('find')
+                        }, 'Find It!'),
+                        React.createElement('div', {
+                            className: `dropContent ${activeDropdown === 'find' ? 'show' : 'hide'}`
+                        },
+                            React.createElement(Link, {to: '/findLocation'}, 'Add Location')
+                        )
+                    )
+                )
+            );
+        };
+
+        const App = () => (
+            React.createElement(ReactRouterDOM.HashRouter, null,
+                React.createElement('div', null,
+
+                    React.createElement(Navigation),
+                    React.createElement('div', {id: 'content'},
+                        React.createElement(Route, {path: '/', exact: true, component: Home}),
+                        React.createElement(Route, {path: '/home', component: Home}),
+                        React.createElement(Route, {path: '/findLocation', component: FindLocation}),
+                        React.createElement(Route, {path: '/register', component: Register}),
+                        React.createElement(Route, {path: '/login', component: Login}),
+                        React.createElement(Route, {path: '/profile', component: Profile})
+                    )
+                )
+            )
+        );
+
+        // render the app into the page root
+        const container = document.getElementById('root');
+
+        try {
+            // use React 18 createRoot API if available
+            if (ReactDOM.createRoot) {
+                const root = ReactDOM.createRoot(container);
+                root.render(React.createElement(App));
+            } else {
+                ReactDOM.render(React.createElement(App), container);
+            }
+        } catch (error) {
+            console.error("React rendering failed:", error);
+            container.innerHTML = '<h1>React Error: ' + error.message + '</h1>';
+        }
+
+    </script>
+</body>
+
+</html>

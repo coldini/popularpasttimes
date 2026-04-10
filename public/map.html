@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popular Pastimes Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Find Cheap Activities</h2>
+
+<!-- User enters a city -->
+<input id="city" placeholder="Enter city" style="width: 180px;" />
+<input id="state" placeholder="State/Province (optional)" style="width: 180px; margin-left: 0.5rem;" />
+<input id="country" placeholder="Country (optional)" style="width: 180px; margin-left: 0.5rem;" />
+<select id="costFilter" style="margin-left: 0.5rem;">
+  <option value="any">Any cost</option>
+  <option value="cheap">Cheap</option>
+  <option value="medium">Medium</option>
+  <option value="expensive">Expensive</option>
+</select>
+<select id="groupFilter" style="margin-left: 0.5rem;">
+  <option value="">Group size</option>
+  <option value="1">1+</option>
+  <option value="3">3+</option>
+  <option value="5">5+</option>
+  <option value="10">10+</option>
+</select>
+
+<button onclick="searchByCity()" style="margin-left: 0.5rem;">Search by city</button>
+<button onclick="searchByGeolocation()" style="margin-left: 0.5rem;">Use my location</button>
+
+<!-- Leaflet map -->
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/location.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const city = urlParams.get('city');
+    if (city) {
+      document.getElementById('city').value = city;
+      searchByCity();
+    }
+  });
+</script>
+
+</body>
+</html>

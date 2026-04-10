@@ -1,0 +1,181 @@
+/* General Body Styles */
+html,
+body {
+    margin: 0rem;
+    padding: 0rem;
+}
+
+body {
+    background-color: #e4ebb9;
+    color: black;
+    font-family: sans-serif;
+}
+
+/* Title Navigation Bar Styles */
+#titleNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0rem;
+    left: 0rem;
+    z-index: 1;
+    width: 100%;
+    min-height: 70px;
+    font-family: serif;
+    letter-spacing: 0.1rem;
+    color: #e4ebb9;
+    background-color: #3b3b3a;
+    padding: 0.75rem 1rem;
+    box-shadow: #121B18 0rem 0.2rem 0.2rem;
+}
+
+#nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+.dropDown {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 1rem;
+    font-size: 1rem;
+    color: black;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dropHeader {
+    background: none;
+    border: none;
+    color: #660404;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.dropContent {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    box-shadow: 0.25rem 0.25rem 0.5rem lightblue;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.dropContent a,
+.dropContent span,
+.dropContent button {
+    color: #e9e2e2;
+    display: block;
+    padding: 0.25rem 0;
+    text-decoration: none;
+}
+
+#nav a {
+    text-decoration: none;
+    color: #e9e2e2;
+}
+
+#nav a:hover,
+.dropHeader:hover,
+.dropContent a:hover {
+    color: #ffffff;
+}
+
+
+#title {
+    font-size: 2rem;
+    white-space: nowrap;
+    letter-spacing: 0.2rem;
+}
+
+#nav {
+    text-align: right;
+    font-size: 1rem;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-right: 2rem;
+    padding-top: 1rem
+}
+
+#nav a {
+    text-decoration: none;
+    color: #e9e2e2;
+}
+
+#info {
+    font-style: italic;
+    padding: 1rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+}
+
+/* Content Area Styles */
+#content {
+    padding: 1rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+}
+
+#content a:link {
+    color: firebrick;
+}
+
+#content a:visited {
+    color: darkorchid;
+}
+
+#content a:hover {
+    color: maroon;
+}
+
+#content img {
+    width: 40%;
+    border-radius: 0.5rem;
+    box-shadow: 0.4rem 0.4rem 0.4rem rgba(0, 0, 0, 0.6);
+}
+
+#p {
+    font-family: 'Courier New', Courier, monospace
+}
+
+/* Footer Styles */
+#footer {
+    position: fixed;
+    bottom: 0rem;
+    left: 0rem;
+    z-index: 1;
+    background-color: #121B18;
+    color: #e4ebb9;
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+@media screen and (min-width: 40rem) {
+    #titleNav {
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
+}
+
+@media screen and (min-width: 480px) {
+    .sng-page {
+        padding: 2.0em;
+    }
+
+    .sng-page h1 {
+        font-size: 6.0em;
+        color: black;
+    }
+}
