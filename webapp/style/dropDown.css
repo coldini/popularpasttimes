@@ -58,17 +58,25 @@
 
     right:-50rem; /* initially all submenus should be "off the right of the screen" by 50 rems */
     display: block; /* Always render, position controls visibility */
+    visibility: hidden; /* Add visibility hidden as additional fallback */
+    opacity: 0; /* Add opacity 0 as additional fallback */
 }
 
 /* The JS code adds and removes class .show and class .hide to/from dropContent and this 
    provides some animation due to the transition styled in .dropContent */
 
-/* when JS code adds class "show" to dropConent, the dropContent is right aligned (because of right:0px))with its 
+/* when JS code adds class "show" to dropContent, the dropContent is right aligned (because of right:0px) with its 
    first non-static parent, dropDown (which is position:relative) */
-.dropDown .show {
+.dropContent.show {
     right: 0rem; /* bring the submenu onto the visible area of the viewport */
+    visibility: visible; /* Make visible when shown */
+    opacity: 1; /* Make fully opaque when shown */
+    pointer-events: auto;
 }
 
-.dropDown .hide {
+.dropContent.hide {
     right:-50rem; /* hide the submenu "off the right of the screen" by 50 rems */
+    visibility: hidden; /* Hide when not shown */
+    opacity: 0; /* Make transparent when hidden */
+    pointer-events: none;
 }

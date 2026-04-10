@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "ba0025db33c95d8b66cd6de1f4c25b8b70456fb2789ec6c97cd88d432eed3fb3"
     },
+    "developing-genkit-go": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "computedHash": "14dde37f197a606c7978a0876ca836002cae799dfc677d8da31b2f25ddee74e1"
+    },
     "developing-genkit-js": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
@@ -50,6 +55,11 @@
       "source": "firebase/agent-skills",
       "sourceType": "github",
       "computedHash": "0688a8ad6cb72149924352cc47e6cc8bf815e944b636a67b9da225cc9b025afc"
+    },
+    "firestore-security-rules-auditor": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "computedHash": "f3e47896a49b76db787f47ee97f8cb2e23c51e4b18a73cd2ded32d6cc8c02869"
     }
   }
 }

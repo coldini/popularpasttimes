@@ -60,24 +60,44 @@ async function findNearbyActivities(lat, lon) {
   out;
   `;
 
+  const overpassEndpoints = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.openstreetmap.fr/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter'
+  ];
+
+  const headers = {
+    'Content-Type': 'text/plain',
+    'User-Agent': 'PopularPasttimes/1.0 (+https://popularpastimes.web.app)'
+  };
+
   let data;
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const response = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: overpassQuery,
-    });
-    const text = await response.text();
+  const errors = [];
+
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const endpoint = overpassEndpoints[attempt % overpassEndpoints.length];
 
     try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers,
+        body: overpassQuery,
+      });
+
+      const text = await response.text();
+      if (!response.ok) {
+        throw new Error(`Overpass ${response.status} ${response.statusText}: ${text.substring(0, 200)}`);
+      }
+
       data = JSON.parse(text);
       break;
     } catch (err) {
-      if (attempt === 2) {
-        console.log('Overpass failed after 3 attempts:', text);
-        throw new Error('Activity search temporarily unavailable');
+      errors.push(`${endpoint} -> ${err.message}`);
+      if (attempt === 5) {
+        console.log('Overpass failed after 6 attempts:', errors.join(' | '));
+        throw new Error('Activity search temporarily unavailable. Please try again later.');
       }
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 1200));
     }
   }
 

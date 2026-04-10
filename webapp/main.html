@@ -28,7 +28,6 @@
 
 
     <script src="_JS_reusable/tableUtilities.js"></script>
-    <script src="_JS_reusable/dropDownFW.js"></script>
     <script src="_JS_reusable/MakeObj.js"></script>
     <script src="_JS_reusable/MakeReviewer.js"></script>
     <script src="_JS_reusable/ajax_alt.js"></script>
@@ -103,6 +102,18 @@
                 return () => document.removeEventListener('click', handleClickOutside);
             }, []);
 
+            const getDropdownStyle = (dropdownName) => {
+                const isOpen = activeDropdown === dropdownName;
+                return {
+                    right: isOpen ? '0rem' : '-50rem',
+                    visibility: isOpen ? 'visible' : 'hidden',
+                    opacity: isOpen ? 1 : 0,
+                    pointerEvents: isOpen ? 'auto' : 'none',
+                    transition: 'all 0.25s ease',
+                    position: 'absolute'
+                };
+            };
+
             return React.createElement('div', {id: 'titleNav'},
                 React.createElement('div', {id: 'title'}, 'Popular Pasttimes'),
                 React.createElement('div', {id: 'nav'},
@@ -116,7 +127,8 @@
                             onClick: () => toggleDropdown('account')
                         }, 'Account'),
                         React.createElement('div', {
-                            className: `dropContent ${activeDropdown === 'account' ? 'show' : 'hide'}`
+                            className: 'dropContent',
+                            style: getDropdownStyle('account')
                         },
                             React.createElement(Link, {to: '/register'}, 'Register'), React.createElement('br'),
                             React.createElement(Link, {to: '/login'}, 'Log In'), React.createElement('br'),
@@ -130,7 +142,8 @@
                             onClick: () => toggleDropdown('find')
                         }, 'Find It!'),
                         React.createElement('div', {
-                            className: `dropContent ${activeDropdown === 'find' ? 'show' : 'hide'}`
+                            className: 'dropContent',
+                            style: getDropdownStyle('find')
                         },
                             React.createElement(Link, {to: '/findLocation'}, 'Add Location')
                         )
