@@ -1,5 +1,6 @@
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const fetch = globalThis.fetch
+  ? (...args) => globalThis.fetch(...args)
+  : (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 // US state abbreviation mapping
 const stateAbbreviations = {
