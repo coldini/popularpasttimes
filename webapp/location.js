@@ -75,10 +75,10 @@ async function searchByCity() {
   const city = document.getElementById('city')?.value?.trim();
   if (!city) return alert('Please enter a city');
 
-  const { cost, groupSize, state, country } = getFilters();
+  const { cost, groupSize, state, country, activityType, duration, rating } = getFilters();
 
   try {
-    const data = await fetchActivities({ city, cost, groupSize, state, country });
+    const data = await fetchActivities({ city, cost, groupSize, state, country, activityType, duration, rating });
     renderMarkers(data);
   } catch (err) {
     alert('Search failed: ' + err.message);
@@ -92,14 +92,14 @@ function searchByGeolocation() {
     return;
   }
 
-  const { cost, groupSize } = getFilters();
+  const { cost, groupSize, activityType, duration, rating } = getFilters();
 
   navigator.geolocation.getCurrentPosition(async (position) => {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
     try {
-      const data = await fetchActivities({ lat, lon, cost, groupSize });
+      const data = await fetchActivities({ lat, lon, cost, groupSize, activityType, duration, rating });
       renderMarkers(data, [lat, lon]);
     } catch (err) {
       alert('Search failed: ' + err.message);

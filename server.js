@@ -4,6 +4,40 @@ const { findNearbyActivities, findLocation } = require("./locationModule");
 
 const app = express();
 
+function getPrice(activity) {
+  if (typeof activity.price === 'number') return activity.price;
+  if (activity.cost === 'cheap') return 5;
+  if (activity.cost === 'medium') return 20;
+  if (activity.cost === 'expensive') return 40;
+  return 20;
+}
+
+function matchesActivityType(activity, activityType) {
+  const requested = (activityType || '').toLowerCase();
+  const type = (activity.type || '').toLowerCase();
+  const category = (activity.category || '').toLowerCase();
+
+  if (!requested) return true;
+  if (type.includes(requested) || category.includes(requested)) return true;
+
+  switch (requested) {
+    case 'outdoor':
+      return category === 'outdoor' || ['park', 'garden', 'viewpoint', 'miniature_golf'].includes(type);
+    case 'food':
+      return category === 'food' || ['restaurant', 'fast_food', 'cafe', 'bar'].includes(type);
+    case 'cultural':
+      return category === 'cultural' || type === 'museum';
+    case 'educational':
+      return category === 'cultural' || type === 'museum';
+    case 'entertainment':
+      return category === 'entertainment' || ['bar', 'cafe', 'restaurant', 'miniature_golf', 'viewpoint'].includes(type);
+    case 'indoor':
+      return ['museum', 'restaurant', 'cafe', 'bar', 'fast_food'].includes(type);
+    default:
+      return false;
+  }
+}
+
 // serve static files from public and webapp folders
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "webapp")));
@@ -47,15 +81,24 @@ app.get("/findLocation", async (req, res) => {
     // Cost filter
     if (cost && cost !== 'any') {
       if (cost === 'free') {
-        filtered = filtered.filter((activity) => activity.cost === 'free' || activity.price === 0);
+        filtered = filtered.filter((activity) => getPrice(activity) === 0);
       } else if (cost === '$0-$10') {
-        filtered = filtered.filter((activity) => activity.price >= 0 && activity.price <= 10);
+        filtered = filtered.filter((activity) => {
+          const price = getPrice(activity);
+          return price >= 0 && price <= 10;
+        });
       } else if (cost === '$10-$25') {
-        filtered = filtered.filter((activity) => activity.price >= 10 && activity.price <= 25);
+        filtered = filtered.filter((activity) => {
+          const price = getPrice(activity);
+          return price >= 10 && price <= 25;
+        });
       } else if (cost === '$25-$50') {
-        filtered = filtered.filter((activity) => activity.price >= 25 && activity.price <= 50);
+        filtered = filtered.filter((activity) => {
+          const price = getPrice(activity);
+          return price >= 25 && price <= 50;
+        });
       } else if (cost === '$50+') {
-        filtered = filtered.filter((activity) => activity.price > 50);
+        filtered = filtered.filter((activity) => getPrice(activity) > 50);
       } else {
         filtered = filtered.filter((activity) => activity.cost === cost);
       }
@@ -81,27 +124,24 @@ app.get("/findLocation", async (req, res) => {
 
     // Activity type filter
     if (activityType) {
-      filtered = filtered.filter((activity) =>
-        activity.type?.toLowerCase().includes(activityType.toLowerCase()) ||
-        activity.category?.toLowerCase().includes(activityType.toLowerCase())
-      );
+      filtered = filtered.filter((activity) => matchesActivityType(activity, activityType));
     }
 
     // Duration filter
     if (duration) {
-      if (duration === 'short') {
-        filtered = filtered.filter((activity) => activity.duration && activity.duration < 60); // minutes
-      } else if (duration === 'medium') {
-        filtered = filtered.filter((activity) => activity.duration && activity.duration >= 60 && activity.duration <= 180);
-      } else if (duration === 'long') {
-        filtered = filtered.filter((activity) => activity.duration && activity.duration > 180);
-      }
+      filtered = filtered.filter((activity) => {
+        if (typeof activity.duration !== 'number') return false;
+        if (duration === 'short') return activity.duration < 60;
+        if (duration === 'medium') return activity.duration >= 60 && activity.duration <= 180;
+        if (duration === 'long') return activity.duration > 180;
+        return false;
+      });
     }
 
     // Rating filter
     if (rating) {
       const minRating = parseFloat(rating.replace('+', ''));
-      filtered = filtered.filter((activity) => activity.rating && activity.rating >= minRating);
+      filtered = filtered.filter((activity) => typeof activity.rating === 'number' && activity.rating >= minRating);
     }
 
     res.json(filtered);
